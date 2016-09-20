@@ -40,6 +40,10 @@ class TableChildExampleViewController: UITableViewController, IndicatorInfoProvi
         fatalError("init(coder:) has not been implemented")
     }
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib(nibName: "PostCell", bundle: Bundle.main), forCellReuseIdentifier: cellIdentifier)
