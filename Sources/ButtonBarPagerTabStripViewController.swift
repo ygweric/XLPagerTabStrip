@@ -166,6 +166,10 @@ open class ButtonBarPagerTabStripViewController: PagerTabStripViewController, Pa
         // b) The view is rotating.  This ensures that
         //    collectionView:layout:sizeForItemAtIndexPath: is called again and can use the views
         //    *new* frame so that the buttonBarView cell's actually get resized correctly
+        relayoutButtonBarView()
+    }
+    
+    open func  relayoutButtonBarView() {
         cachedCellWidths = calculateWidths()
         buttonBarView.collectionViewLayout.invalidateLayout()
         // When the view first appears or is rotated we also need to ensure that the barButtonView's
