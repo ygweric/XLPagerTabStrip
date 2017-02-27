@@ -343,7 +343,7 @@ open class ButtonBarPagerTabStripViewController: PagerTabStripViewController, Pa
 
     open override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         super.scrollViewDidEndScrollingAnimation(scrollView)
-
+        
         guard scrollView == containerView else { return }
         shouldUpdateButtonBarView = true
     }
