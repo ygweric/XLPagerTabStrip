@@ -354,44 +354,15 @@ open class ButtonBarPagerTabStripViewController: PagerTabStripViewController, Pa
     private func calculateWidths() -> [CGFloat] {
         let flowLayout = buttonBarView.collectionViewLayout as! UICollectionViewFlowLayout // swiftlint:disable:this force_cast
         let numberOfCells = viewControllers.count
-
-        var minimumCellWidths = [CGFloat]()
-        var collectionViewContentWidth: CGFloat = 0
-
-        for viewController in viewControllers {
-            let childController = viewController as! IndicatorInfoProvider // swiftlint:disable:this force_cast
-            let indicatorInfo = childController.indicatorInfo(for: self)
-            switch buttonBarItemSpec! {
-            case .cellClass(let widthCallback):
-                let width = widthCallback(indicatorInfo)
-                minimumCellWidths.append(width)
-                collectionViewContentWidth += width
-            case .nibFile(_, _, let widthCallback):
-                let width = widthCallback(indicatorInfo)
-                minimumCellWidths.append(width)
-                collectionViewContentWidth += width
-            }
+        let collectionViewAvailiableWidth = buttonBarView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right
+        let averageWidth = collectionViewAvailiableWidth / CGFloat(numberOfCells)
+        
+        var stretchedCellWidths = [CGFloat]()
+        for _ in 0..<numberOfCells {
+            stretchedCellWidths.append(averageWidth)
         }
-
-        let cellSpacingTotal = CGFloat(numberOfCells - 1) * flowLayout.minimumLineSpacing
-        collectionViewContentWidth += cellSpacingTotal
-
-        let collectionViewAvailableVisibleWidth = buttonBarView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right
-
-        if !settings.style.buttonBarItemsShouldFillAvailableWidth || collectionViewAvailableVisibleWidth < collectionViewContentWidth {
-            return minimumCellWidths
-        } else {
-            let stretchedCellWidthIfAllEqual = (collectionViewAvailableVisibleWidth - cellSpacingTotal) / CGFloat(numberOfCells)
-            let generalMinimumCellWidth = calculateStretchedCellWidths(minimumCellWidths, suggestedStretchedCellWidth: stretchedCellWidthIfAllEqual, previousNumberOfLargeCells: 0)
-            var stretchedCellWidths = [CGFloat]()
-
-            for minimumCellWidthValue in minimumCellWidths {
-                let cellWidth = (minimumCellWidthValue > generalMinimumCellWidth) ? minimumCellWidthValue : generalMinimumCellWidth
-                stretchedCellWidths.append(cellWidth)
-            }
-
-            return stretchedCellWidths
-        }
+        
+        return stretchedCellWidths
     }
 
     private var shouldUpdateButtonBarView = true
